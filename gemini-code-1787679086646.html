@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>바이킹 포지션 테스트</title>
+    <!-- 구글 폰트 불러오기 -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Pretendard:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; margin: 0; padding: 20px; 
+            box-sizing: border-box;
+        }
+        .container { 
+            background: white; max-width: 420px; width: 100%; 
+            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            padding: 40px 20px; text-align: center; 
+        }
+        
+        h1 { font-family: 'Black Han Sans', sans-serif; font-size: 28px; color: #1a237e; letter-spacing: 1px; }
+        h2 { font-size: 20px; color: #333; line-height: 1.4; word-break: keep-all; margin-bottom: 25px; }
+        p { color: #666; font-size: 15px; line-height: 1.5; }
+        
+        .hidden { display: none !important; }
+        
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .btn { 
+            display: block; width: 100%; padding: 16px; margin: 12px 0; 
+            border: none; border-radius: 12px; background-color: #f5f6fa; 
+            font-size: 16px; font-weight: bold; color: #2f3640; 
+            cursor: pointer; transition: all 0.2s; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .btn:hover { background-color: #e1e2e6; transform: translateY(-2px); }
+        .btn-primary { background-color: #1a237e; color: white; margin-top: 20px; box-shadow: 0 4px 10px rgba(26, 35, 126, 0.3); }
+        .btn-primary:hover { background-color: #283593; }
+        .btn-insta { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; }
+        .btn-eta { background-color: #c62917; color: white; }
+
+        #result-title { font-family: 'Black Han Sans', sans-serif; font-size: 26px; color: #d32f2f; margin: 20px 0 10px 0; }
+        #result-desc { font-size: 16px; color: #444; background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
+        
+        .progress-bar { width: 100%; background-color: #e0e0e0; border-radius: 10px; height: 8px; margin-bottom: 20px; }
+        .progress { background-color: #1a237e; height: 100%; border-radius: 10px; width: 0%; transition: width 0.3s ease-out; }
+    </style>
+</head>
+<body>
+
+<div class="container fade-in" id="main-container">
+    <!-- 시작 화면 -->
+    <div id="start-screen">
+        <div style="font-size: 60px; margin-bottom: 10px;">⚾</div>
+        <h1>나의 야구 DNA 테스트</h1>
+        <p>인천대 야구동아리 바이킹이 분석해주는<br>나와 찰떡인 그라운드 포지션은?</p>
+        <button class="btn btn-primary" onclick="startTest()">테스트 시작하기 🚀</button>
+    </div>
+
+    <!-- 질문 화면 -->
+    <div id="question-screen" class="hidden">
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <h2 id="question-title">질문 들어갑니다</h2>
+        <div id="answer-buttons"></div>
+    </div>
+
+    <!-- 결과 화면 -->
+    <div id="result-screen" class="hidden">
+        <p style="font-weight: bold; color: #1a237e; margin-bottom: 0;">당신의 포지션은 바로...</p>
+        <div id="result-title">결과 계산 중...</div>
+        <div id="result-desc"></div>
+        
+        <div style="border-top: 2px dashed #ddd; padding-top: 20px; margin-top: 10px;">
+            <p style="font-weight: bold; margin-bottom: 15px;">👇 결과가 마음에 든다면? 몸만 오세요!</p>
+            <button class="btn btn-primary" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSf9waMg9UpNL0v7C14kQXaYoMa5cLZ7wkoRWFOhI2vlnEgIIg/viewform', '_blank')">📝 바이킹 가입 신청하기</button>
+            <button class="btn btn-insta" onclick="window.open('https://www.instagram.com/inu_viking', '_blank')">📸 바이킹 인스타 구경하기</button>
+            <button class="btn btn-eta" onclick="window.open('https://everytime.kr/418891/v/416513144', '_blank')">🔥 에타 모집글 다시보기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let scores = { coach: 0, manager: 0, pitcher: 0, catcher: 0, infielder: 0, outfielder: 0 };
+    
+    // 총 8문항 세팅
+    const questions = [
+        {
+            q: "랜더스필드 직관 중, 9회말 2아웃 1점 차 만루 위기! 당신의 행동은?",
+            answers: [
+                { text: "투수 구위가 떨어졌어! 무조건 교체해야 돼! 🧐", weights: { coach: 3, catcher: 2 } },
+                { text: "아아악! 제발 막아라!! 목 터져라 응원하기 📣", weights: { manager: 3, infielder: 1 } },
+                { text: "내가 저 마운드에 있었으면 무조건 삼진 잡았다 🔥", weights: { pitcher: 3, outfielder: 1 } }
+            ]
+        },
+        {
+            q: "팀원들끼리 사소한 의견 충돌이 생겼다. 당신의 대처는?",
+            answers: [
+                { text: "상황을 분석하고 객관적인 팩트로 룰을 정한다 📊", weights: { coach: 3, catcher: 2 } },
+                { text: "일단 분위기 풀게 다 같이 밥이나 먹으러 가자고 한다 🍕", weights: { manager: 3, outfielder: 1 } },
+                { text: "말보다는 실력! 훈련 성과로 팀을 하나로 묶는다 💪", weights: { pitcher: 2, infielder: 2 } }
+            ]
+        },
+        {
+            q: "평소 운동을 하거나 몸을 쓸 때 가장 짜릿한 순간은?",
+            answers: [
+                { text: "예상치 못한 상황을 동물적인 반사신경으로 대처할 때 ⚡", weights: { infielder: 3, catcher: 1 } },
+                { text: "온몸의 코어를 활용해 묵직한 파워를 뿜어낼 때 💥", weights: { pitcher: 3, outfielder: 2 } },
+                { text: "팀원들이 내 서포트를 받고 최고의 기량을 낼 때 🤝", weights: { manager: 3, coach: 2 } }
+            ]
+        },
+        {
+            q: "내야 땅볼을 쳤다! 아슬아슬한 타이밍, 당신의 선택은?",
+            answers: [
+                { text: "무조건 헤드퍼스트 슬라이딩! 투지로 살아남는다 🏃‍♂️", weights: { outfielder: 3, infielder: 2 } },
+                { text: "베이스 밟는 스텝을 계산해 전력 질주한다 ⏱️", weights: { pitcher: 1, coach: 2 } },
+                { text: "아웃되더라도 더그아웃 분위기를 띄우며 들어온다 👏", weights: { manager: 3, catcher: 1 } }
+            ]
+        },
+        {
+            q: "야구 동아리에 들어온다면 가장 기대되는 것은?",
+            answers: [
+                { text: "짜릿한 승리와 우승 트로피 🏆", weights: { pitcher: 2, infielder: 2, outfielder: 2 } },
+                { text: "MT, 뒤풀이 등 새로운 사람들과의 끈끈한 친목 🍻", weights: { manager: 3, coach: 1 } },
+                { text: "수비 시프트와 상대 타자 분석 등 딥한 야구 토크 🧠", weights: { coach: 3, catcher: 3 } }
+            ]
+        },
+        // --- 여기서부터 새로 추가된 3문항 ---
+        {
+            q: "야구 글러브나 배트를 새로 사야 할 때, 당신의 스타일은?",
+            answers: [
+                { text: "수비 위치, 무게 중심, 가죽 재질 꼼꼼히 비교해서 산다 🧐", weights: { coach: 2, catcher: 2 } },
+                { text: "야구는 뽀대지! 화려하고 멋진 인기 브랜드부터 지른다 ✨", weights: { outfielder: 3, manager: 2 } },
+                { text: "장비보단 실력! 동아리방 공용 장비도 감지덕지 쓴다 ⚾", weights: { pitcher: 2, infielder: 2 } }
+            ]
+        },
+        {
+            q: "중요한 경기에서 나의 뼈아픈 실책으로 점수를 내줬다. 그날 밤 당신은?",
+            answers: [
+                { text: "플레이 영상을 돌려보며 원인을 분석하고 섀도우 모션을 해본다 📹", weights: { catcher: 3, coach: 2 } },
+                { text: "지나간 건 지나간 것! 다음 경기를 생각하며 꿀잠 잔다 💤", weights: { outfielder: 3, infielder: 2 } },
+                { text: "너무 분하다. 당장 배팅장이나 공터로 달려가 스윙을 돌린다 🔥", weights: { pitcher: 3, infielder: 1 } }
+            ]
+        },
+        {
+            q: "동아리 정기 연습 날, 당신이 가장 신나는 순간은?",
+            answers: [
+                { text: "캐치볼부터 펑고까지, 기본기를 탄탄하게 반복 훈련할 때 🧤", weights: { infielder: 3, coach: 2 } },
+                { text: "훈련은 실전처럼! 다 같이 편 나눠서 자체 미니 게임 뛸 때 🏟️", weights: { pitcher: 2, outfielder: 2 } },
+                { text: "부원들 사진 예쁘게 찍어주고 쉬는 시간에 간식 나눠 먹을 때 📸", weights: { manager: 3 } }
+            ]
+        }
+    ];
+
+    const resultDetails = {
+        coach: { emoji: "🧠", title: "팀의 브레인, 감독/코치", desc: "철저한 분석력과 이성적인 판단력!\n그라운드 밖에서 판을 짜고 전략을 세우는 데 천부적인 재능이 있네요.\n\n바이킹의 브레인이 되어주세요!" },
+        manager: { emoji: "📣", title: "팀의 심장, 매니저", desc: "최고의 친화력과 텐션!\n당신의 응원 한 번이면 죽어가던 팀 분위기도 살아납니다.\n\n장비 대여부터 룰 교육까지 완벽 지원! 바이킹의 매니저로 합류하세요." },
+        pitcher: { emoji: "🔥", title: "마운드의 지배자, 투수", desc: "강인한 체력과 멘탈로 정면 승부를 즐기는 승부사!\n위기 상황에서도 묵직하게 자기 공을 던질 줄 아는 당신이 필요합니다.\n\n바이킹 마운드의 에이스가 되어주세요!" },
+        catcher: { emoji: "🛡️", title: "든든한 안방마님, 포수", desc: "전체적인 흐름을 읽는 눈과 희생정신을 모두 갖춘 야구의 숨은 지휘자!\n\n투수의 멘탈을 잡아줄 바이킹의 안방마님이 되어주세요." },
+        infielder: { emoji: "⚡", title: "내야의 진공청소기, 내야수", desc: "동물적인 반사신경과 엄청난 민첩성!\n불규칙 바운드도 부드럽게 처리하는 센스를 가졌네요.\n\n바이킹 센터라인의 핵심이 되어주세요!" },
+        outfielder: { emoji: "🚀", title: "그라운드의 야생마, 외야수", desc: "지치지 않는 체력과 빠른 발로 넓은 구장을 커버하는 당신!\n타구 판단 능력이 예술입니다.\n\n바이킹의 외야를 책임져주세요!" }
+    };
+
+    let currentStep = 0;
+
+    function startTest() {
+        document.getElementById('start-screen').classList.add('hidden');
+        const qScreen = document.getElementById('question-screen');
+        qScreen.classList.remove('hidden');
+        qScreen.classList.add('fade-in'); 
+        nextQuestion();
+    }
+
+    function nextQuestion() {
+        if (currentStep >= questions.length) {
+            showResult();
+            return;
+        }
+        
+        // 프로그레스 바 (문항 수에 맞게 자동 계산)
+        document.getElementById('progress').style.width = ((currentStep / questions.length) * 100) + "%";
+
+        const qData = questions[currentStep];
+        document.getElementById('question-title').innerText = `Q${currentStep + 1}. ${qData.q}`;
+        
+        const btnContainer = document.getElementById('answer-buttons');
+        btnContainer.innerHTML = "";
+        
+        qData.answers.forEach(answer => {
+            const btn = document.createElement('button');
+            btn.className = "btn";
+            btn.innerText = answer.text;
+            btn.onclick = () => {
+                const container = document.getElementById('main-container');
+                container.classList.remove('fade-in');
+                void container.offsetWidth; 
+                container.classList.add('fade-in');
+                
+                selectAnswer(answer.weights);
+            };
+            btnContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(weights) {
+        for (let pos in weights) {
+            scores[pos] += weights[pos];
+        }
+        currentStep++;
+        nextQuestion();
+    }
+
+    function showResult() {
+        // 결과 표시 직전에 프로그레스 바를 100%로 채워줌
+        document.getElementById('progress').style.width = "100%";
+        
+        setTimeout(() => {
+            document.getElementById('question-screen').classList.add('hidden');
+            const rScreen = document.getElementById('result-screen');
+            rScreen.classList.remove('hidden');
+            rScreen.classList.add('fade-in');
+
+            const finalPositionKey = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            const result = resultDetails[finalPositionKey];
+            
+            document.getElementById('result-title').innerText = `${result.emoji} ${result.title}`;
+            document.getElementById('result-desc').innerHTML = result.desc.replace(/\n/g, '<br>');
+        }, 300); // 바가 끝까지 차오르는 걸 잠깐 보여주고 화면 전환
+    }
+</script>
+</body>
+</html>
