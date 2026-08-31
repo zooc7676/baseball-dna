@@ -2,8 +2,17 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 모바일 환경에서 화면 더블탭 확대 방지 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <title>바이킹 포지션 테스트</title>
+    
+    <!-- 링크 공유 시 보여질 썸네일 및 설명 (OG 태그) -->
+    <meta property="og:title" content="나의 야구 DNA 테스트 ⚾">
+    <meta property="og:description" content="인천대 야구동아리 바이킹이 분석해주는 나와 찰떡인 그라운드 포지션은?">
+    <!-- 이미지가 있다면 아래 content 속성에 이미지 URL을 넣어주세요. 없으면 이 줄은 삭제해도 됩니다. -->
+    <meta property="og:image" content="https://scontent-icn2-1.cdninstagram.com/v/t51.82787-19/651007059_18084957524254405_8341792600354262481_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=scontent-icn2-1.cdninstagram.com&_nc_cat=101&_nc_oc=Q6cZ2gFPGOGI1TQK51mLs0RfftODS8UiSSN3g6xkz1rKPPc9uO-9_FUdzFEU_tjj5LNC1yc&_nc_ohc=Sqz5ekOHwMkQ7kNvwGmOWXL&_nc_gid=7iI9T5SirjZVQySLmiXhLA&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_AQLtGCxUbOB3hLLKTC8Ijs3toh4iYnE1yPnQ4VXSEZQbzw&oe=6A9AF4E2&_nc_sid=7a9f4b"> 
+    
     <!-- 구글 폰트 불러오기 -->
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Pretendard:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -43,7 +52,7 @@
         .btn-eta { background-color: #c62917; color: white; }
 
         #result-title { font-family: 'Black Han Sans', sans-serif; font-size: 26px; color: #d32f2f; margin: 20px 0 10px 0; }
-        #result-desc { font-size: 16px; color: #444; background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
+        #result-desc { font-size: 16px; color: #444; background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 25px; line-height: 1.6; }
         
         .progress-bar { width: 100%; background-color: #e0e0e0; border-radius: 10px; height: 8px; margin-bottom: 20px; }
         .progress { background-color: #1a237e; height: 100%; border-radius: 10px; width: 0%; transition: width 0.3s ease-out; }
@@ -85,7 +94,6 @@
 <script>
     let scores = { coach: 0, manager: 0, pitcher: 0, catcher: 0, infielder: 0, outfielder: 0 };
     
-    // 총 8문항 세팅
     const questions = [
         {
             q: "랜더스필드 직관 중, 9회말 2아웃 1점 차 만루 위기! 당신의 행동은?",
@@ -127,7 +135,6 @@
                 { text: "수비 시프트와 상대 타자 분석 등 딥한 야구 토크 🧠", weights: { coach: 3, catcher: 3 } }
             ]
         },
-        // --- 여기서부터 새로 추가된 3문항 ---
         {
             q: "야구 글러브나 배트를 새로 사야 할 때, 당신의 스타일은?",
             answers: [
@@ -155,12 +162,12 @@
     ];
 
     const resultDetails = {
-        coach: { emoji: "🧠", title: "팀의 브레인, 감독/코치", desc: "철저한 분석력과 이성적인 판단력!\n그라운드 밖에서 판을 짜고 전략을 세우는 데 천부적인 재능이 있네요.\n\n바이킹의 브레인이 되어주세요!" },
-        manager: { emoji: "📣", title: "팀의 심장, 매니저", desc: "최고의 친화력과 텐션!\n당신의 응원 한 번이면 죽어가던 팀 분위기도 살아납니다.\n\n장비 대여부터 룰 교육까지 완벽 지원! 바이킹의 매니저로 합류하세요." },
-        pitcher: { emoji: "🔥", title: "마운드의 지배자, 투수", desc: "강인한 체력과 멘탈로 정면 승부를 즐기는 승부사!\n위기 상황에서도 묵직하게 자기 공을 던질 줄 아는 당신이 필요합니다.\n\n바이킹 마운드의 에이스가 되어주세요!" },
-        catcher: { emoji: "🛡️", title: "든든한 안방마님, 포수", desc: "전체적인 흐름을 읽는 눈과 희생정신을 모두 갖춘 야구의 숨은 지휘자!\n\n투수의 멘탈을 잡아줄 바이킹의 안방마님이 되어주세요." },
-        infielder: { emoji: "⚡", title: "내야의 진공청소기, 내야수", desc: "동물적인 반사신경과 엄청난 민첩성!\n불규칙 바운드도 부드럽게 처리하는 센스를 가졌네요.\n\n바이킹 센터라인의 핵심이 되어주세요!" },
-        outfielder: { emoji: "🚀", title: "그라운드의 야생마, 외야수", desc: "지치지 않는 체력과 빠른 발로 넓은 구장을 커버하는 당신!\n타구 판단 능력이 예술입니다.\n\n바이킹의 외야를 책임져주세요!" }
+        coach: { emoji: "🧠", title: "팀의 브레인, 감독/코치", desc: "철저한 분석력과 이성적인 판단력!<br>그라운드 밖에서 판을 짜고 전략을 세우는 데 천부적인 재능이 있네요.<br><br>바이킹의 브레인이 되어주세요!" },
+        manager: { emoji: "📣", title: "팀의 심장, 매니저", desc: "최고의 친화력과 텐션!<br>당신의 응원 한 번이면 죽어가던 팀 분위기도 살아납니다.<br><br>장비 대여부터 룰 교육까지 완벽 지원! 바이킹의 매니저로 합류하세요." },
+        pitcher: { emoji: "🔥", title: "마운드의 지배자, 투수", desc: "강인한 체력과 멘탈로 정면 승부를 즐기는 승부사!<br>위기 상황에서도 묵직하게 자기 공을 던질 줄 아는 당신이 필요합니다.<br><br>바이킹 마운드의 에이스가 되어주세요!" },
+        catcher: { emoji: "🛡️", title: "든든한 안방마님, 포수", desc: "전체적인 흐름을 읽는 눈과 희생정신을 모두 갖춘 야구의 숨은 지휘자!<br><br>투수의 멘탈을 잡아줄 바이킹의 안방마님이 되어주세요." },
+        infielder: { emoji: "⚡", title: "내야의 진공청소기, 내야수", desc: "동물적인 반사신경과 엄청난 민첩성!<br>불규칙 바운드도 부드럽게 처리하는 센스를 가졌네요.<br><br>바이킹 센터라인의 핵심이 되어주세요!" },
+        outfielder: { emoji: "🚀", title: "그라운드의 야생마, 외야수", desc: "지치지 않는 체력과 빠른 발로 넓은 구장을 커버하는 당신!<br>타구 판단 능력이 예술입니다.<br><br>바이킹의 외야를 책임져주세요!" }
     };
 
     let currentStep = 0;
@@ -179,7 +186,6 @@
             return;
         }
         
-        // 프로그레스 바 (문항 수에 맞게 자동 계산)
         document.getElementById('progress').style.width = ((currentStep / questions.length) * 100) + "%";
 
         const qData = questions[currentStep];
@@ -213,7 +219,6 @@
     }
 
     function showResult() {
-        // 결과 표시 직전에 프로그레스 바를 100%로 채워줌
         document.getElementById('progress').style.width = "100%";
         
         setTimeout(() => {
@@ -226,8 +231,8 @@
             const result = resultDetails[finalPositionKey];
             
             document.getElementById('result-title').innerText = `${result.emoji} ${result.title}`;
-            document.getElementById('result-desc').innerHTML = result.desc.replace(/\n/g, '<br>');
-        }, 300); // 바가 끝까지 차오르는 걸 잠깐 보여주고 화면 전환
+            document.getElementById('result-desc').innerHTML = result.desc;
+        }, 300);
     }
 </script>
 </body>
