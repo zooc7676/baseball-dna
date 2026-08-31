@@ -94,11 +94,12 @@
 <script>
     let scores = { coach: 0, manager: 0, pitcher: 0, catcher: 0, infielder: 0, outfielder: 0 };
     
+    // 총 8문항 세팅 (가중치 밸런스 패치 완료)
     const questions = [
         {
             q: "랜더스필드 직관 중, 9회말 2아웃 1점 차 만루 위기! 당신의 행동은?",
             answers: [
-                { text: "투수 구위가 떨어졌어! 무조건 교체해야 돼! 🧐", weights: { coach: 3, catcher: 2 } },
+                { text: "투수 구위가 떨어졌어! 무조건 교체해야 돼! 🧐", weights: { coach: 3, catcher: 1 } },
                 { text: "아아악! 제발 막아라!! 목 터져라 응원하기 📣", weights: { manager: 3, infielder: 1 } },
                 { text: "내가 저 마운드에 있었으면 무조건 삼진 잡았다 🔥", weights: { pitcher: 3, outfielder: 1 } }
             ]
@@ -106,7 +107,7 @@
         {
             q: "팀원들끼리 사소한 의견 충돌이 생겼다. 당신의 대처는?",
             answers: [
-                { text: "상황을 분석하고 객관적인 팩트로 룰을 정한다 📊", weights: { coach: 3, catcher: 2 } },
+                { text: "상황을 분석하고 객관적인 팩트로 룰을 정한다 📊", weights: { catcher: 3, coach: 1 } },
                 { text: "일단 분위기 풀게 다 같이 밥이나 먹으러 가자고 한다 🍕", weights: { manager: 3, outfielder: 1 } },
                 { text: "말보다는 실력! 훈련 성과로 팀을 하나로 묶는다 💪", weights: { pitcher: 2, infielder: 2 } }
             ]
@@ -116,15 +117,15 @@
             answers: [
                 { text: "예상치 못한 상황을 동물적인 반사신경으로 대처할 때 ⚡", weights: { infielder: 3, catcher: 1 } },
                 { text: "온몸의 코어를 활용해 묵직한 파워를 뿜어낼 때 💥", weights: { pitcher: 3, outfielder: 2 } },
-                { text: "팀원들이 내 서포트를 받고 최고의 기량을 낼 때 🤝", weights: { manager: 3, coach: 2 } }
+                { text: "팀원들이 내 서포트를 받고 최고의 기량을 낼 때 🤝", weights: { coach: 3, manager: 2 } }
             ]
         },
         {
             q: "내야 땅볼을 쳤다! 아슬아슬한 타이밍, 당신의 선택은?",
             answers: [
                 { text: "무조건 헤드퍼스트 슬라이딩! 투지로 살아남는다 🏃‍♂️", weights: { outfielder: 3, infielder: 2 } },
-                { text: "베이스 밟는 스텝을 계산해 전력 질주한다 ⏱️", weights: { pitcher: 1, coach: 2 } },
-                { text: "아웃되더라도 더그아웃 분위기를 띄우며 들어온다 👏", weights: { manager: 3, catcher: 1 } }
+                { text: "베이스 밟는 스텝을 계산해 전력 질주한다 ⏱️", weights: { coach: 3, pitcher: 1 } },
+                { text: "아웃되더라도 더그아웃 분위기를 띄우며 들어온다 👏", weights: { catcher: 3, manager: 2 } }
             ]
         },
         {
@@ -132,7 +133,7 @@
             answers: [
                 { text: "짜릿한 승리와 우승 트로피 🏆", weights: { pitcher: 2, infielder: 2, outfielder: 2 } },
                 { text: "MT, 뒤풀이 등 새로운 사람들과의 끈끈한 친목 🍻", weights: { manager: 3, coach: 1 } },
-                { text: "수비 시프트와 상대 타자 분석 등 딥한 야구 토크 🧠", weights: { coach: 3, catcher: 3 } }
+                { text: "수비 시프트와 상대 타자 분석 등 딥한 야구 토크 🧠", weights: { catcher: 3, coach: 2 } }
             ]
         },
         {
@@ -140,7 +141,7 @@
             answers: [
                 { text: "수비 위치, 무게 중심, 가죽 재질 꼼꼼히 비교해서 산다 🧐", weights: { coach: 2, catcher: 2 } },
                 { text: "야구는 뽀대지! 화려하고 멋진 인기 브랜드부터 지른다 ✨", weights: { outfielder: 3, manager: 2 } },
-                { text: "장비보단 실력! 동아리방 공용 장비도 감지덕지 쓴다 ⚾", weights: { pitcher: 2, infielder: 2 } }
+                { text: "장비보단 실력! 동아리방 공용 장비도 감지덕지 쓴다 ⚾", weights: { infielder: 3, pitcher: 2 } }
             ]
         },
         {
@@ -155,8 +156,8 @@
             q: "동아리 정기 연습 날, 당신이 가장 신나는 순간은?",
             answers: [
                 { text: "캐치볼부터 펑고까지, 기본기를 탄탄하게 반복 훈련할 때 🧤", weights: { infielder: 3, coach: 2 } },
-                { text: "훈련은 실전처럼! 다 같이 편 나눠서 자체 미니 게임 뛸 때 🏟️", weights: { pitcher: 2, outfielder: 2 } },
-                { text: "부원들 사진 예쁘게 찍어주고 쉬는 시간에 간식 나눠 먹을 때 📸", weights: { manager: 3 } }
+                { text: "훈련은 실전처럼! 다 같이 편 나눠서 자체 미니 게임 뛸 때 🏟️", weights: { outfielder: 3, pitcher: 2 } },
+                { text: "부원들 사진 예쁘게 찍어주고 쉬는 시간에 간식 나눠 먹을 때 📸", weights: { manager: 3, catcher: 1 } }
             ]
         }
     ];
